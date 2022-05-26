@@ -1,0 +1,415 @@
+{% extends "base.html" %}
+{% block titulo %} Lista del Inventario | Departamento de Electromedicina {% endblock %}    
+{% load qr_code %}
+
+
+
+
+
+{% block contenido %} 
+<div class="header">
+
+    <!--Content before waves-->
+    <div class="inner-header flex">
+    <!--Just the logo.. Don't mind this-->
+    <h1 style="font-size:3vw"> Hostpital | Dashboard</h1>
+    <h4 style="font-size:3vw"></h4>
+    </div>
+    
+    <!--Waves Container-->
+    <div>
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+    <defs>
+    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+    </defs>
+    <g class="parallax">
+    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+    </g>
+    </svg>
+    </div>
+    <!--Waves end-->
+    
+    </div>
+
+<style>
+ 
+
+body {
+  margin:0;
+}
+
+h1 {
+  font-family: 'Lato', sans-serif;
+  font-weight:300;
+  letter-spacing: 1px;
+  font-size:68px;
+  width: 100%;
+}
+
+
+.header {
+  text-align:center;
+  background: linear-gradient(60deg, rgb(161, 0, 236) 0%, rgb(64, 4, 77) 100%);
+  color:white;
+  width: 100%;
+}
+.logo {
+  width: 100%;
+  fill:white;
+  padding-right:15px;
+  display:inline-block;
+  vertical-align: middle;
+}
+
+.inner-header {
+  min-height: 100px;
+  width:100%;
+  margin: 0;
+  padding: 0;
+}
+
+.flex { /*Flexbox for containers*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.waves {
+  width: 100%;
+  height:15vh;
+  margin-bottom:-7px; /*Fix for safari gap*/
+  min-height:100px;
+  max-height:100px;
+}
+
+.content {
+  width: 100%;
+  height:0vh;
+  text-align:center;
+  background-color: white;
+}
+
+/* Animation */
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+   transform: translate3d(-90px,0,0);
+  }
+  100% { 
+    transform: translate3d(85px,0,0);
+  }
+}
+/*Shrinking for mobile*/
+@media (max-width: 568px) {
+  .waves {
+    height:40px;
+    min-height:40px;
+    width: 100%;
+  }
+  .content {
+    height:30vh;
+  }
+  h1 {
+    font-size:  10vw;;
+    
+  }
+
+}
+</style>
+
+
+<div class="table-responsive">
+  
+</div>
+{% block js %}
+<script>
+    function eliminarProducto(id){
+      Swal.fire({
+        "title":"¿Estás seguro que deseas eliminar este equipo?",
+        "text":"Esta acción no es reversible",
+        "icon":"warning",
+        "showCancelButton":true,
+        "confirmButtonColor":"darkred",
+        "cancelButtonColor":"#3085d6",
+        "confirmButtonText":"Si, eliminar",
+        "cancelButtonText":"No, cancelar"
+        
+        
+      })
+      .then(function(result){
+        if(result.isConfirmed){
+          window.location.href="eliminar/"+id;
+        }
+      })
+  }
+</script>
+
+    {% endblock %}
+    
+    
+    
+    </p>
+
+
+    <div class="card-header p-3">
+        <a name="" id="" class="btn btn-info" href="{% url 'crear' %}" role="button">Agregar un nuevo equipo</a>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+    <h4 class="card-title">Inventario Actual</h4>
+    
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Imagen</th>
+                <th>Clave</th>
+                <th>Equipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>No. Serie</th>
+                <th>Proveedor</th>
+                <th>Ficha Mantenimiento</th>
+                <th>Frecuencia</th>
+                <th>Ubicación</th>
+                <th>Dominio</th>
+                <th>Acciones</th>
+            </tr>
+             </thead>
+            <tbody>
+                {% for equipo in entity %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                      <span class="border border-primary"></span>
+                      <img src="{{ equipo.imagen.url }}" height="80" />
+                  </td>
+                    <td>{{ equipo.clave}}</td>
+                    <td>{{ equipo.equipo}}</td>
+                    <td>{{ equipo.marca }}</td>
+                    <td>{{ equipo.modelo }}</td>
+                    <td>{{ equipo.num_serie }}</td>
+                    <td>{{ equipo.proveedor }}</td>
+                    <td>
+                     
+                      <a href="{% url 'detalle' equipo.id %}"> Mantenimiento </a>
+                     
+
+                    </td>
+                    <td>{{ equipo.frecuencia }}</td>
+                    <td>{{ equipo.ubicación }}</td>
+                    <td>{{ equipo.dominio }}</td>
+                    <td> 
+                      
+                        <a name="" id="" class="btn btn-success" href="{% url 'editar' equipo.id %}" role="button">Editar</a> 
+                        |
+                        <a href="#" onclick="eliminarProducto({{ equipo.id }})" class="btn btn-danger">Borrar</a>
+                        
+                    </td>
+                                      {% endfor %}
+               
+            </tr>
+        </tbody>
+    </table>
+    <div>
+      {% include 'inventarios/paginator.html' %}
+    </div>
+    </div>
+  </div>
+</div>
+  </div>
+ 
+    <table class="table align-middle mb-0 bg-white">
+      <br><br><br>
+     
+      <thead class="bg-light">
+        <tr>
+          <th>Nombre</th>
+          <th>Puesto</th>
+          <th>Status</th>
+          <th>Pendientes</th>
+          <th>Ubicación</th>
+          <th>Contactar</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        <tr>
+          <h2>Ingenieros en turno</h2><br><br>
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+                  src="https://img.freepik.com/vector-gratis/ilustracion-diseno-plano-ingeniero-civil_188398-201.jpg"
+                  alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                  />
+              <div class="ms-3">
+                <p class="fw-bold mb-1">Luis Enrique Palacios Nacianceno</p>
+                <p class="text-muted mb-0">enrpaluis@gmail.com</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">Ingeniero Biomédico</p>
+            <p class="text-muted mb-0">Departamento Ingenieria Biomédica</p>
+          </td>
+          <td>
+              <span class="badge alert-danger">Ocupado</span>
+          </td>
+          <td>
+          <button type="button" class="btn btn-primary">
+              4 <span class="badge badge-light">Pendientes en curso</span>
+            </button>
+          </td>
+          <td>Taller</td>
+          <td>
+            <button type="button" class="btn btn-link btn-sm btn-rounded">
+              Llamar
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+                  src="https://img.freepik.com/vector-gratis/ilustracion-diseno-plano-ingeniero-civil_188398-201.jpg"
+                  alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                  />
+              <div class="ms-3">
+                <p class="fw-bold mb-1">Ana Camila Ramirez García</p>
+                <p class="text-muted mb-0">anacamilarg@gmail.com</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">Ingeniero Biomédico</p>
+            <p class="text-muted mb-0">Departamento Ingenieria Biomédica</p>
+          </td>
+          <td>
+              <span class="badge alert-danger">Ocupado</span>
+          </td>
+          <td>
+          <button type="button" class="btn btn-primary">
+              4 <span class="badge badge-light">Pendientes en curso</span>
+            </button>
+          </td>
+          <td>Oficina</td>
+          <td>
+            <button type="button" class="btn btn-link btn-sm btn-rounded">
+              Llamar
+            </button>
+          </td>
+        </tr>
+        
+        <tr>
+          
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+              src="https://img.freepik.com/vector-gratis/ilustracion-diseno-plano-ingeniero-civil_188398-201.jpg"
+              alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                  />
+              <div class="ms-3">
+                <p class="fw-bold mb-1">Heidi Olivares Ayala</p>
+                <p class="text-muted mb-0">heidiolivares@gmail.com</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">Ingeniero Biomédico</p>
+            <p class="text-muted mb-0">Departamento de Electromedicina</p>
+          </td>
+          <td>
+              <span class="badge alert-success">Disponible</span>
+          </td>
+          <td>
+          <button type="button" class="btn btn-dark">
+               <span class="badge badge-ligt">Sin pendientes</span>
+            </button>
+          </td>
+          <td>Facultad</td>
+          <td>
+            <button type="button" class="btn btn-link btn-sm btn-rounded">
+              Llamar
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="d-flex align-items-center">
+              <img
+              src="https://img.freepik.com/vector-gratis/ilustracion-diseno-plano-ingeniero-civil_188398-201.jpg"
+              alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                  />
+              <div class="ms-3">
+                <p class="fw-bold mb-1">Bryan Antonio Soria Rodriguez</p>
+                <p class="text-muted mb-0">bryansoria@gmail.com</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="fw-normal mb-1">Ingeniero Biomédico</p>
+            <p class="text-muted mb-0">Departamento de Electromedicina</p>
+          </td>
+          <td>
+              <span class="badge alert-success">Disponible</span>
+          </td>
+          <td>
+              <button type="button" class="btn btn-danger">
+                  10 <span class="badge badge-light">Pendientes en curso</span>
+                </button>
+          </td>
+          <td>Oficina</td>
+          <td>
+            <button type="button" class="btn btn-link btn-sm btn-rounded">
+              Llamar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    </div>
+    <div class="card-footer text-muted">
+        Hospital Universitario "Dr. José Eleuterio González" Av. Dr. José Eleuterio González S/N, Mitras Centro, 64460 Monterrey, N.L.
+    </div>
+
+    {% endblock %}
+</div>
+</br>
+

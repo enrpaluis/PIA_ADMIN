@@ -1,0 +1,20 @@
+
+/* Variables Globales */
+@import url('https://fonts.googleapis.com/css2?family=Lora&family=Montserrat:ital,wght@0,100;0,400;0,600;1,400;1,500;1,600&display=swap');
+
+/* body */
+
+body{
+    font-family:'Comic Sans', sans-serif;
+
+}
+/* Menú */
+
+#barra_navegacion a{
+    
+    font-size: 50px;
+    color: #3f3f3f;
+    min-height: min-content;
+
+}
+

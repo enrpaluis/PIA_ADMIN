@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+{% load qr_code %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo Site of django-qr-code</title>
+  <style>
+        body {
+          font-family: Sans-Serif;
+        }
+        code.multiline {
+          display: block;
+          white-space: pre-wrap
+        }
+        td {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+  </style>
+</head>
+<body>
+{% block content %}
+<h1>Django QR Code Demo Site</h1>
+<p>This is a demo site for the <em>Django QR Code</em> application.</p>
+<a href="https://badge.fury.io/py/django-qr-code"><img src="https://badge.fury.io/py/django-qr-code.svg"
+                                                       alt="Latest PyPI Version"></a>
+<a href="http://django-qr-code.readthedocs.io/en/latest/"><img
+  src="https://readthedocs.org/projects/django-qr-code/badge/?version=latest" alt="Documentation Status"></a>
+<a href="https://travis-ci.org/dprog-philippe-docourt/django-qr-code"><img
+  src="https://travis-ci.org/dprog-philippe-docourt/django-qr-code.svg?branch=master" alt="Build Status"></a>
+<a href="https://codeclimate.com/github/dprog-philippe-docourt/django-qr-code/maintainability"><img
+  src="https://api.codeclimate.com/v1/badges/c47e79bf51f6a2bb8264/maintainability"/></a>
+<a href='https://coveralls.io/github/dprog-philippe-docourt/django-qr-code?branch=master'><img
+  src='https://coveralls.io/repos/github/dprog-philippe-docourt/django-qr-code/badge.svg?branch=master'
+  alt='Coverage Status'/></a>
+
+<h2>Image Formats</h2>
+<p>The SVG is the default image format. It is a vector image format so it can be scaled as wanted. However, it has two
+  drawbacks.</p>
+<p>The size is not given in pixel, which can be problematic if the design of your website relies on a fixed width (in
+  pixels).</p>
+<p>The format is less compact than PNG and results in a larger HTML content. Note that a base64 PNG is less compressible
+  than a SVG tag, so it might not matter that much of you use HTML compression on your web server.</p>
+<p>SVG has <a href="http://caniuse.com/#feat=svg">broad support</a> now and it will work properly on any modern web
+  browser.</p>
+
+<h2>Examples of <em>qr_from_text</em> Usages</h2>
+<p>The <em>qr_from_text</em> tag renders an inline QR code within your Django template. It comes with several options to
+  customize the image format (SVG or PNG), the size, the border and the matrix size.</p>
+
+<table width="100%">
+  <tr>
+    <td width="33%">
+      <h3>A tiny "hello world" QR code in SVG format (default format)</h3>
+    </td>
+    <td width="33%">
+      <h3>A tiny "hello world" QR code in PNG format</h3>
+    </td>
+    <td width="33%">
+      <h3>A small "hello world" QR code</h3>
+    </td>
+  </tr>
+  <tr>
+    <td>Template code:</td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <strong><code>{% templatetag openblock %} qr_from_text "Hello World!" size="T" image_format="svg" {% templatetag closeblock %}</code></strong>
+    </td>
+    <td width="33%">
+      <strong><code>{% templatetag openblock %} qr_from_text "Hello World!" size="T" image_format="png" {% templatetag closeblock %}</code></strong>
+    </td>
+    <td width="33%">
+      <strong><code>{% templatetag openblock %} qr_from_text "Hello World!" size="S" {% templatetag closeblock %}</code></strong>
+    </td>
+  </tr>
+  <tr>
+    <td width="33%">
+      <div>{% qr_from_text "Hello World!" size="T" image_format="svg" %}</div>
+    </td>
+    <td width="33%">
+      <div>{% qr_from_text "Google.com" size="T" image_format="png" %}</div>
+    </td>
+    <td width="33%">
+      <div>{% qr_from_text "Hello World!" size="S" %}</div>
+    </td>
+  </tr>
+</table>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block titulo %} Inicio {% endblock %}  
+  
+{% block contenido %} 
+
+      <!-- Slider de imagenes-->
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active col-8 col-md-0 offset-md-2">
+              <img srcset="/imagenes/imagenes/front.png 100w,
+              /imagenes/imagenes/front.png 800w"
+      sizes="(max-width: 500px) 400px,
+             760px" src="/imagenes/imagenes/front.png">
+            </div>
+            
+        </div>
+      </div>
+
+  
+
+
+
+{% endblock %}
